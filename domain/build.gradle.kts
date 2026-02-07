@@ -1,13 +1,14 @@
 plugins {
-    id("java-library")
-    alias(libs.plugins.jetbrains.kotlin.jvm)
+    kotlin("jvm")
 }
+
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-}
-kotlin {
-    compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
+
+dependencies {
+    testImplementation(kotlin("test"))
+}
+

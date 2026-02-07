@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -37,7 +38,6 @@ kotlin {
     }
 }
 
-
 ktlint {
     version.set("0.50.0")
     debug.set(true)
@@ -56,9 +56,17 @@ ktlint {
     }
 }
 
-
 dependencies {
+    implementation(project(":domain"))
+    implementation(project(":data"))
+    implementation(project(":ui"))
+    implementation(project(":video"))
+
     implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
+    ksp(libs.hilt.compiler)
+
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
@@ -71,7 +79,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.compose.material3)
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
+    implementation(libs.accompanist.systemuicontroller)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

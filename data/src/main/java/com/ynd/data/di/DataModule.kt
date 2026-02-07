@@ -1,7 +1,8 @@
 package com.ynd.data.di
 
-import com.ynd.data.local.VideoLocalDataSource
 import com.ynd.data.repository.VideoRepositoryImpl
+import com.ynd.domain.GetVideosUseCase
+import com.ynd.domain.RecordVideoUseCase
 import com.ynd.domain.repository.VideoRepository
 import dagger.Module
 import dagger.Provides
@@ -15,15 +16,18 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideVideoLocalDataSource(): VideoLocalDataSource {
-        return VideoLocalDataSource()
-    }
+    fun provideVideoRepository(
+        impl: VideoRepositoryImpl
+    ): VideoRepository = impl
 
     @Provides
-    @Singleton
-    fun provideVideoRepository(
-        localDataSource: VideoLocalDataSource
-    ): VideoRepository {
-        return VideoRepositoryImpl(localDataSource)
-    }
+    fun provideGetVideosUseCase(
+        repository: VideoRepository
+    ): GetVideosUseCase = GetVideosUseCase(repository)
+
+    @Provides
+    fun provideRecordVideoUseCase(
+        repository: VideoRepository
+    ): RecordVideoUseCase = RecordVideoUseCase(repository)
 }
+

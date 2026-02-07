@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "JournalApp"
 include(":app")
 include(":ui")
+include(":video")

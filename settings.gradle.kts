@@ -23,3 +23,4 @@ rootProject.name = "JournalApp"
 include(":app")
 include(":ui")
 include(":video")
+include(":data")

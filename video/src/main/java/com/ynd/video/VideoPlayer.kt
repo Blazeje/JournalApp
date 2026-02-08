@@ -1,6 +1,5 @@
 package com.ynd.video
 
-import android.net.Uri
 import android.view.ViewGroup
 import androidx.annotation.OptIn
 import androidx.compose.foundation.clickable
@@ -15,6 +14,7 @@ import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
+import androidx.core.net.toUri
 
 @OptIn(UnstableApi::class)
 @Composable
@@ -28,7 +28,7 @@ fun VideoPlayer(
 
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build().apply {
-            val mediaItem = MediaItem.fromUri(Uri.parse(videoUri))
+            val mediaItem = MediaItem.fromUri(videoUri.toUri())
             setMediaItem(mediaItem)
             prepare()
             repeatMode = Player.REPEAT_MODE_ONE

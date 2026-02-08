@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import com.ynd.ui.R
 import com.ynd.video.VideoPlayer
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 

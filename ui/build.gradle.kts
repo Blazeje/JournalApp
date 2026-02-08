@@ -48,6 +48,7 @@ ktlint {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":video"))
 
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)

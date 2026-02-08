@@ -1,23 +1,42 @@
 package com.ynd.data.repository
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
+import com.ynd.data.db.VideosQueries
 import com.ynd.data.local.VideoLocalDataSource
 import com.ynd.domain.entity.VideoEntry
 import com.ynd.domain.repository.VideoRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class VideoRepositoryImpl @Inject constructor(
-    private val localDataSource: VideoLocalDataSource
+class VideoRepositoryImpl(
+    private val queries: VideosQueries
 ) : VideoRepository {
 
-    override suspend fun saveVideo(video: VideoEntry) {
-        localDataSource.saveVideo(video)
+    override fun observeVideos(): Flow<List<VideoEntry>> =
+        queries.selectAll()
+            .asFlow()
+            .mapToList(Dispatchers.IO)
+            .map { list ->
+                list.map {
+                    VideoEntry(
+                        fileUri = it.fileUri,
+                        description = it.description
+                    )
+                }
+            }
+
+    override suspend fun insertVideo(video: VideoEntry) {
+        queries.insertVideo(
+            fileUri = video.fileUri,
+            description = video.description
+        )
     }
 
-    override suspend fun getAllVideos(): List<VideoEntry> {
-        return localDataSource.getAllVideos()
-    }
-
-    override suspend fun getVideoById(id: String): VideoEntry? {
-        return localDataSource.getVideoById(id)
+    override suspend fun clearVideos() {
+        queries.deleteAll()
     }
 }
+

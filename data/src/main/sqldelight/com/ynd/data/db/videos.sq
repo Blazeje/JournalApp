@@ -1,0 +1,15 @@
+CREATE TABLE videos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    fileUri TEXT NOT NULL,
+    description TEXT
+);
+
+selectAll:
+SELECT * FROM videos;
+
+insertVideo:
+INSERT INTO videos(fileUri, description)
+VALUES (?, ?);
+
+deleteAll:
+DELETE FROM videos;

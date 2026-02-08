@@ -1,13 +1,11 @@
 package com.ynd.domain.repository
 
 import com.ynd.domain.entity.VideoEntry
+import kotlinx.coroutines.flow.Flow
 
 
 interface VideoRepository {
-
-    suspend fun saveVideo(video: VideoEntry)
-
-    suspend fun getAllVideos(): List<VideoEntry>
-
-    suspend fun getVideoById(id: String): VideoEntry?
+    fun observeVideos(): Flow<List<VideoEntry>>
+    suspend fun insertVideo(video: VideoEntry)
+    suspend fun clearVideos()
 }

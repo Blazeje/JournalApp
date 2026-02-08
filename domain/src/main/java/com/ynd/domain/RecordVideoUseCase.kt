@@ -9,6 +9,6 @@ class RecordVideoUseCase @Inject constructor(
     private val videoRepository: VideoRepository
 ) {
     suspend operator fun invoke(videoEntry: VideoEntry) {
-        videoRepository.saveVideo(videoEntry)
+        videoRepository.insertVideo(videoEntry)
     }
 }

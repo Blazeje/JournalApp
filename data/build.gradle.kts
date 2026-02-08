@@ -3,17 +3,23 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.sqldelight)
+}
+
+sqldelight {
+    databases {
+        create("JournalDatabase") {
+            packageName.set("com.ynd.data.db")
+        }
+    }
 }
 
 android {
     namespace = "com.ynd.data"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 27
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -23,7 +29,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
+                "proguard-rules.pro"
             )
         }
     }
@@ -53,6 +59,9 @@ ktlint {
 
 dependencies {
     implementation(project(":domain"))
+
+    implementation(libs.sqldelight.android.driver)
+    implementation(libs.sqldelight.coroutines.extensions)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

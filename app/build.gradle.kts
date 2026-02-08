@@ -1,17 +1,13 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.hilt)
 }
 
 android {
     namespace = "com.ynd.journalapp"
 
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.ynd.journalapp"
@@ -62,10 +58,10 @@ dependencies {
     implementation(project(":ui"))
     implementation(project(":video"))
 
-    implementation(libs.hilt.android)
-    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+
     implementation(libs.androidx.navigation.compose)
-    ksp(libs.hilt.compiler)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.navigation.fragment.ktx)

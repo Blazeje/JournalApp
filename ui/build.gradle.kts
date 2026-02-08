@@ -1,20 +1,15 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.hilt)
 }
 
 android {
     namespace = "com.ynd.ui"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 27
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -54,8 +49,9 @@ ktlint {
 dependencies {
     implementation(project(":domain"))
 
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)

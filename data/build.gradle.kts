@@ -1,7 +1,5 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.sqldelight)
 }
@@ -63,8 +61,7 @@ dependencies {
     implementation(libs.sqldelight.android.driver)
     implementation(libs.sqldelight.coroutines.extensions)
 
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
+    implementation(libs.koin.android)
 
     implementation(libs.retrofit)
     implementation(libs.kotlinx.coroutines.core)

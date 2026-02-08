@@ -5,42 +5,27 @@ import androidx.lifecycle.viewModelScope
 import com.ynd.domain.GetVideosUseCase
 import com.ynd.domain.RecordVideoUseCase
 import com.ynd.domain.entity.VideoEntry
-
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class FeedViewModel @Inject constructor(
-    private val getVideosUseCase: GetVideosUseCase,
+class FeedViewModel(
+    getVideosUseCase: GetVideosUseCase,
     private val recordVideoUseCase: RecordVideoUseCase
 ) : ViewModel() {
 
-    private val _videos = MutableStateFlow<List<VideoEntry>>(emptyList())
-    val videos: StateFlow<List<VideoEntry>> = _videos.asStateFlow()
+    val videos: StateFlow<List<VideoEntry>> =
+        getVideosUseCase()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = emptyList()
+            )
 
-    init {
-        loadVideos()
-    }
-
-    fun loadVideos() {
+    fun addVideo(video: VideoEntry) {
         viewModelScope.launch {
-            _videos.value = getVideosUseCase()
-        }
-    }
-
-    fun addVideoPlaceholder() {
-        // Dodajemy tymczasowy placeholder wideo
-        val placeholder = VideoEntry(
-            fileUri = "placeholder.mp4",
-            description = "Test video"
-        )
-        viewModelScope.launch {
-            recordVideoUseCase(placeholder)
-            loadVideos()
+            recordVideoUseCase(video)
         }
     }
 }

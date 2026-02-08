@@ -1,9 +1,8 @@
 package com.ynd.data.local
 
 import com.ynd.domain.entity.VideoEntry
-import javax.inject.Inject
 
-class VideoLocalDataSource @Inject constructor() {
+class VideoLocalDataSource  constructor() {
 
     private val videoList = mutableListOf<VideoEntry>()
 

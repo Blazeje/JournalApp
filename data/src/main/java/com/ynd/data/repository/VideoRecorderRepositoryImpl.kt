@@ -1,6 +1,8 @@
 package com.ynd.data.repository
 
+import android.Manifest
 import android.content.Context
+import androidx.annotation.RequiresPermission
 import androidx.camera.video.*
 import androidx.core.content.ContextCompat
 import com.ynd.domain.repository.VideoRecorderRepository
@@ -20,10 +22,12 @@ class VideoRecorderRepositoryImpl(
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
+    @RequiresPermission(Manifest.permission.RECORD_AUDIO)
     override suspend fun startRecording(outputFile: File) {
         val outputOptions = FileOutputOptions.Builder(outputFile).build()
         activeRecording = videoCapture.output
             .prepareRecording(context, outputOptions)
+            .withAudioEnabled()
             .start(ContextCompat.getMainExecutor(context)) { event ->
                 if (event is VideoRecordEvent.Finalize) {
                     finalizeEventFlow.tryEmit(event)

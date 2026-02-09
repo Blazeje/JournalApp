@@ -1,15 +1,16 @@
 CREATE TABLE videos (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     fileUri TEXT NOT NULL,
-    description TEXT
+    description TEXT,
+    createdAt INTEGER NOT NULL
 );
 
 selectAll:
-SELECT * FROM videos;
+SELECT * FROM videos ORDER BY createdAt DESC;
 
 insertVideo:
-INSERT INTO videos(fileUri, description)
-VALUES (?, ?);
+INSERT INTO videos(fileUri, description, createdAt)
+VALUES (?, ?, ?);
 
 deleteAll:
 DELETE FROM videos;

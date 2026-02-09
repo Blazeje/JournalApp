@@ -20,8 +20,10 @@ class VideoRepositoryImpl(
             .map { list ->
                 list.map {
                     VideoEntry(
+                        id = it.id.toString(),
                         fileUri = it.fileUri,
-                        description = it.description
+                        description = it.description,
+                        createdAt = it.createdAt
                     )
                 }
             }
@@ -29,7 +31,8 @@ class VideoRepositoryImpl(
     override suspend fun insertVideo(video: VideoEntry) {
         queries.insertVideo(
             fileUri = video.fileUri,
-            description = video.description
+            description = video.description,
+            createdAt = video.createdAt
         )
     }
 

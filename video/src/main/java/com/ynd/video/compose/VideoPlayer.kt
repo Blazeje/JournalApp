@@ -1,12 +1,14 @@
-package com.ynd.video
+package com.ynd.video.compose
 
 import android.view.ViewGroup
 import androidx.annotation.OptIn
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
@@ -69,19 +71,25 @@ fun VideoPlayer(
         }
     }
 
-    Box(modifier = modifier.clickable { onClick() }) {
+    Box(
+        modifier = modifier
+            .background(Color.Transparent)
+            .clickable { onClick() }
+    ) {
         AndroidView(
             factory = { ctx ->
                 PlayerView(ctx).apply {
                     player = exoPlayer
                     useController = false
+                    setBackgroundColor(android.graphics.Color.TRANSPARENT)
                     layoutParams = ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT
                     )
                 }
             },
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
         )
     }
 }

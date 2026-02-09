@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import androidx.compose.runtime.collectAsState
 import com.ynd.video.CameraContract.Effect
+import com.ynd.video.compose.CameraScreen
 
 class CameraFragment : Fragment() {
 

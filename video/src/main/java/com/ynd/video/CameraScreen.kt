@@ -3,6 +3,7 @@ package com.ynd.video
 import android.net.Uri
 import android.util.Log
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -20,78 +21,68 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.ynd.domain.repository.VideoRecorderRepository
 import com.ynd.domain.repository.VideoCreatorRepository
+import com.ynd.video.CameraContract.State
+import com.ynd.video.CameraContract.Event
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
 
 @Composable
 fun CameraScreen(
-    onVideoRecorded: (Uri, String) -> Unit,
-    onBack: () -> Unit
+    state: State,
+    onEvent: (Event) -> Unit
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val coroutineScope = rememberCoroutineScope()
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
-    
+
     val factory: VideoCreatorRepository = koinInject()
-    
+
+    var showDescriptionDialog by remember { mutableStateOf(false) }
+    var recordedUri by remember { mutableStateOf<Uri?>(null) }
+    var description by remember { mutableStateOf("") }
+
     val videoCapture = remember { mutableStateOf<VideoCapture<Recorder>?>(null) }
-    
     val videoRecorderRepository: VideoRecorderRepository? = remember(videoCapture.value) {
         videoCapture.value?.let { factory.create(context, it) }
     }
 
-    var isRecording by remember { mutableStateOf(false) }
-    var description by remember { mutableStateOf("") }
-    var showDescriptionDialog by remember { mutableStateOf(false) }
-    var recordedUri: Uri? by remember { mutableStateOf(null) }
-
-    val mainExecutor = ContextCompat.getMainExecutor(context)
-
     Column(modifier = Modifier.fillMaxSize()) {
+        // Camera Preview
         Box(modifier = Modifier.weight(1f)) {
-            AndroidView(
-                factory = { ctx ->
-                    val previewView = PreviewView(ctx).apply {
-                        layoutParams = ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.MATCH_PARENT
-                        )
+            AndroidView(factory = { ctx ->
+                val previewView = PreviewView(ctx)
+                previewView.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+
+                cameraProviderFuture.addListener({
+                    val cameraProvider = cameraProviderFuture.get()
+                    val preview = Preview.Builder().build().also {
+                        it.setSurfaceProvider(previewView.surfaceProvider)
                     }
 
-                    cameraProviderFuture.addListener({
-                        val cameraProvider = cameraProviderFuture.get()
-                        val preview = Preview.Builder().build().also {
-                            it.surfaceProvider = previewView.surfaceProvider
-                        }
+                    val recorder = Recorder.Builder()
+                        .setQualitySelector(QualitySelector.from(Quality.HIGHEST))
+                        .build()
+                    videoCapture.value = VideoCapture.withOutput(recorder)
 
-                        val recorder = Recorder.Builder()
-                            .setQualitySelector(QualitySelector.from(Quality.HIGHEST))
-                            .build()
-                        videoCapture.value = VideoCapture.withOutput(recorder)
+                    try {
+                        cameraProvider.unbindAll()
+                        cameraProvider.bindToLifecycle(
+                            lifecycleOwner,
+                            CameraSelector.DEFAULT_BACK_CAMERA,
+                            preview,
+                            videoCapture.value
+                        )
+                    } catch (e: Exception) {
+                        Log.e("CameraScreen", "Binding failed", e)
+                    }
+                }, ContextCompat.getMainExecutor(context))
 
-                        try {
-                            cameraProvider.unbindAll()
-                            cameraProvider.bindToLifecycle(
-                                lifecycleOwner,
-                                CameraSelector.DEFAULT_BACK_CAMERA,
-                                preview,
-                                videoCapture.value
-                            )
-                        } catch (e: Exception) {
-                            Log.e("CameraScreen", "Binding failed", e)
-                        }
-                    }, mainExecutor)
+                previewView
+            }, modifier = Modifier.fillMaxSize())
 
-                    previewView
-                },
-                modifier = Modifier.fillMaxSize()
-            )
-
-            if (isRecording) {
+            if (state.isRecording) {
                 Text(
                     "Recording...",
                     color = androidx.compose.ui.graphics.Color.Red,
@@ -100,41 +91,35 @@ fun CameraScreen(
             }
         }
 
+        // Buttons
         Row(
             modifier = Modifier.fillMaxWidth().padding(16.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Button(
-                onClick = {
-                    coroutineScope.launch {
-                        if (isRecording) {
-                            val recordedFile = videoRecorderRepository?.stopRecording()
-                            isRecording = false
-                            if (recordedFile != null) {
-                                recordedUri = Uri.fromFile(recordedFile)
-                                showDescriptionDialog = true
-                            }
-                        } else {
-                            val videoFile = File(
-                                context.cacheDir,
-                                SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.US)
-                                    .format(System.currentTimeMillis()) + ".mp4"
-                            )
-                            isRecording = true
-                            videoRecorderRepository?.startRecording(videoFile)
+            Button(onClick = {
+                coroutineScope.launch {
+                    if (state.isRecording) {
+                        val file = videoRecorderRepository?.stopRecording()
+                        if (file != null) {
+                            recordedUri = Uri.fromFile(file)
+                            showDescriptionDialog = true
                         }
+                        onEvent(Event.StartRecording) // update recording state
+                    } else {
+                        val videoFile = File(context.cacheDir, "${System.currentTimeMillis()}.mp4")
+                        onEvent(Event.StartRecording)
+                        videoRecorderRepository?.startRecording(videoFile)
                     }
                 }
-            ) {
-                Text(if (isRecording) "Stop" else "Record")
+            }) {
+                Text(if (state.isRecording) "Stop" else "Record")
             }
-            
-            Button(onClick = onBack) {
-                Text("Back")
-            }
+
+            Button(onClick = { onEvent(Event.BackClicked) }) { Text("Back") }
         }
     }
 
+    // Description AlertDialog
     if (showDescriptionDialog) {
         AlertDialog(
             onDismissRequest = { showDescriptionDialog = false },
@@ -147,14 +132,19 @@ fun CameraScreen(
                 )
             },
             confirmButton = {
-                TextButton(
-                    onClick = {
-                        recordedUri?.let { onVideoRecorded(it, description) }
-                        showDescriptionDialog = false
+                TextButton(onClick = {
+                    recordedUri?.let { uri ->
+                        onEvent(Event.StopRecording(uri, description))
                     }
-                ) {
-                    Text("Save")
-                }
+                    showDescriptionDialog = false
+                    description = ""
+                }) { Text("Save") }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    showDescriptionDialog = false
+                    description = ""
+                }) { Text("Cancel") }
             }
         )
     }

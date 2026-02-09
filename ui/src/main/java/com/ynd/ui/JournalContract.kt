@@ -14,11 +14,6 @@ interface JournalContract{
 
     sealed class Event {
         data object AddClicked : Event()
-        data class VideoRecorded(
-            val uri: String,
-            val description: String?
-        ) : Event()
-
         data class VideoClicked(val id: String) : Event()
     }
 
@@ -29,7 +24,6 @@ interface JournalContract{
 
     sealed class Effect {
         data object OpenCamera : Effect()
-        data object NavigateBack : Effect()
     }
 
 }

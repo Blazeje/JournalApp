@@ -12,49 +12,34 @@ import com.ynd.ui.JournalContract.State
 import com.ynd.video.VideoPlayer
 
 @Composable
-fun FeedScreen(
-    state: State,
-    onEvent: (Event) -> Unit
-) {
+fun JournalScreen(state: State, onEvent: (Event) -> Unit) {
+    var playingVideoId by remember { mutableStateOf<String?>(null) }
+
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = { onEvent(Event.AddClicked) }
-            ) {
+            FloatingActionButton(onClick = { onEvent(Event.AddClicked) }) {
                 Text("+")
             }
         }
     ) { padding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
+        LazyColumn(modifier = Modifier.fillMaxSize().padding(padding)) {
             items(state.videos) { video ->
-                Card(
-                    modifier = Modifier.padding(8.dp)
-                ) {
+                Card(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
                     Column {
                         VideoPlayer(
                             videoUri = video.fileUri,
-                            isPlaying = state.playingVideoId == video.id,
+                            modifier = Modifier.fillMaxWidth().height(200.dp),
+                            isPlaying = playingVideoId == video.id,
                             onClick = {
-                                onEvent(
-                                    Event.VideoClicked(video.id)
-                                )
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp)
+                                playingVideoId = if (playingVideoId == video.id) null else video.id
+                                onEvent(Event.VideoClicked(video.id))
+                            }
                         )
-
-                        Text(
-                            modifier = Modifier.padding(16.dp),
-                            text = video.description ?: "No description"
-                        )
+                        Text(video.description ?: "No description", modifier = Modifier.padding(16.dp))
                     }
                 }
             }
         }
     }
 }
+

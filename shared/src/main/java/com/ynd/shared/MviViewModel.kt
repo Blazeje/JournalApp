@@ -1,4 +1,4 @@
-package com.ynd.ui.mvi
+package com.ynd.shared
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,8 +17,6 @@ abstract class MviViewModel<STATE, EVENT, INTERNAL_EVENT, EFFECT>(
     private val eventsDispatcher: CoroutineDispatcher = Dispatchers.Default,
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : ViewModel() {
-
-    protected val activeUiStateScope = viewModelScope
 
     protected val _state = MutableStateFlow(initialState)
     val state: StateFlow<STATE> = _state.asStateFlow()

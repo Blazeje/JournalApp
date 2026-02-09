@@ -52,6 +52,7 @@ ktlint {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":shared"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

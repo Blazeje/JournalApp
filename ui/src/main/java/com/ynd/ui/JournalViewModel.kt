@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.ynd.domain.GetVideosUseCase
 import com.ynd.domain.RecordVideoUseCase
 import com.ynd.domain.entity.VideoEntry
-import com.ynd.ui.mvi.MviViewModel
+import com.ynd.shared.MviViewModel
 import kotlinx.coroutines.launch
 import com.ynd.ui.JournalContract.Event
 import com.ynd.ui.JournalContract.State
@@ -12,9 +12,10 @@ import com.ynd.ui.JournalContract.Effect
 import com.ynd.ui.JournalContract.InternalEvent
 
 class JournalViewModel(
-    private val getVideosUseCase: GetVideosUseCase,
-    private val recordVideoUseCase: RecordVideoUseCase
-) : MviViewModel<State, Event, InternalEvent, Effect>(initialState = State()) {
+    private val getVideosUseCase: GetVideosUseCase
+) : MviViewModel<State, Event, InternalEvent, Effect>(
+    initialState = State()
+) {
 
     init {
         observeVideos()
@@ -29,47 +30,21 @@ class JournalViewModel(
         }
     }
 
-    override fun onHandleUiEvent(
-        uiEvent: Event,
-        state: State
-    ) {
+    override fun onHandleUiEvent(uiEvent:Event, state: State) {
         when (uiEvent) {
-            Event.AddClicked -> {
-                emitEffect(Effect.OpenCamera)
-            }
-
-            is Event.VideoRecorded -> {
-                viewModelScope.launch {
-                    recordVideoUseCase(
-                        VideoEntry(
-                            fileUri = uiEvent.uri,
-                            description = uiEvent.description
-                        )
-                    )
-                    emitEffect(Effect.NavigateBack)
-                }
-            }
+            Event.AddClicked -> emitEffect(Effect.OpenCamera)
 
             is Event.VideoClicked -> {
-                val newId =
-                    if (state.playingVideoId == uiEvent.id) null
-                    else uiEvent.id
-
+                val newId = if (state.playingVideoId == uiEvent.id) null else uiEvent.id
                 pushInternal(InternalEvent.PlayingChanged(newId))
             }
         }
     }
 
-    override fun reduce(
-        event: InternalEvent,
-        state: State
-    ): State =
+    override fun reduce(event: InternalEvent, state: State): State =
         when (event) {
-            is InternalEvent.VideosLoaded ->
-                state.copy(videos = event.videos)
-
-            is InternalEvent.PlayingChanged ->
-                state.copy(playingVideoId = event.id)
+            is InternalEvent.VideosLoaded -> state.copy(videos = event.videos)
+            is InternalEvent.PlayingChanged -> state.copy(playingVideoId = event.id)
         }
 }
 

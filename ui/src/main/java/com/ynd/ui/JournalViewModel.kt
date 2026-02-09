@@ -2,8 +2,6 @@ package com.ynd.ui
 
 import androidx.lifecycle.viewModelScope
 import com.ynd.domain.GetVideosUseCase
-import com.ynd.domain.RecordVideoUseCase
-import com.ynd.domain.entity.VideoEntry
 import com.ynd.shared.MviViewModel
 import kotlinx.coroutines.launch
 import com.ynd.ui.JournalContract.Event

@@ -49,7 +49,6 @@ fun CameraScreen(
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        // Camera Preview
         Box(modifier = Modifier.weight(1f)) {
             AndroidView(factory = { ctx ->
                 val previewView = PreviewView(ctx)
@@ -119,7 +118,6 @@ fun CameraScreen(
         }
     }
 
-    // Description AlertDialog
     if (showDescriptionDialog) {
         AlertDialog(
             onDismissRequest = { showDescriptionDialog = false },

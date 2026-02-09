@@ -198,9 +198,8 @@ fun CameraScreen(
             recordedUri = recordedUri!!,
             onSave = { description ->
                 onEvent(Event.StopRecording(recordedUri!!, description))
-                showDescriptionDialog = false
             },
-            onDismiss = { showDescriptionDialog = false }
+            onDismiss = { }
         )
     }
 }

@@ -3,7 +3,7 @@ package com.ynd.video.compose
 import android.view.ViewGroup
 import androidx.annotation.OptIn
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
@@ -27,7 +27,8 @@ fun VideoPlayer(
     videoUri: String,
     modifier: Modifier = Modifier,
     isPlaying: Boolean = false,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    onLongClick: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -74,7 +75,10 @@ fun VideoPlayer(
     Box(
         modifier = modifier
             .background(Color.Transparent)
-            .clickable { onClick() }
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick
+            )
     ) {
         AndroidView(
             factory = { ctx ->

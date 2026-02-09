@@ -36,6 +36,10 @@ class JournalViewModel(
                 val newId = if (state.playingVideoId == uiEvent.id) null else uiEvent.id
                 pushInternal(InternalEvent.PlayingChanged(newId))
             }
+
+            is Event.ShareVideo -> {
+                emitEffect(Effect.ShareVideoIntent(uiEvent.video.fileUri))
+            }
         }
     }
 

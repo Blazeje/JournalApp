@@ -15,6 +15,7 @@ interface JournalContract{
     sealed class Event {
         data object AddClicked : Event()
         data class VideoClicked(val id: String) : Event()
+        data class ShareVideo(val video: VideoEntry) : Event()
     }
 
     sealed class InternalEvent {
@@ -24,6 +25,7 @@ interface JournalContract{
 
     sealed class Effect {
         data object OpenCamera : Effect()
+        data class ShareVideoIntent(val fileUri: String) : Effect()
     }
 
 }

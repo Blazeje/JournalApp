@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -85,6 +86,9 @@ fun JournalScreen(state: State, onEvent: (Event) -> Unit) {
                             onClick = {
                                 playingVideoId = if (playingVideoId == video.id) null else video.id
                                 onEvent(Event.VideoClicked(video.id))
+                            },
+                            onLongClick = {
+                                onEvent(Event.ShareVideo(video))
                             }
                         )
                         Text(

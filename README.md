@@ -1,60 +1,51 @@
-# Mini Video Journal App
+# Journal App
 A small Kotlin/Jetpack Compose app that allows users to record and view short video clips.
 
 ## Tech Stack
 
-- **Language:** Kotlin 2.3
-- **UI:** Jetpack Compose
-- **Dependency Injection:** Hilt
-- **Testing:** JUnit, MockK
+- **Language:** Kotlin 2.3.10
+- **UI:** Jetpack Compose + Fragments
+- **Dependency Injection:** Koin
 - **Architecture:** MVI (Model-View-Intent)
-- **Networking:** Retrofit + Moshi
+- **Database:** SQLDelight
+- **Media:** CameraX (Recording), Media3 / ExoPlayer (Playback)
 - **Coroutines:** Kotlinx.coroutines
-- **Code Quality:** Ktlint (formatting & linting)
-- **Media3 / ExoPlayer** (planned)
-- **SQLDelight** (planned)
-- **Build Tools:** AGP 8.9.1, JDK 21
+- **Build Tools:** AGP 9.0.0, JDK 21
 - **Minimum SDK:** 27, Target SDK: 36
 
 ## **What’s Done ✅**
 
-- App builds and runs successfully
-- `MainActivity` launches `FirstFragment` from `ui` module
-- `FeedViewModel` implemented with Hilt
-- `FeedScreen` Compose UI:
-  - `LazyColumn` showing placeholder videos
-  - Button to add a placeholder video
-- Module dependencies wired correctly:
-  - `app → ui, domain, data, video`
-  - `ui → domain`
-  - `data → domain` (repository implementation injected via Hilt)
+- **Modular Architecture:** Clean separation into `app`, `ui`, `video`, `domain`, `data`, and `shared` modules.
+- **Video Recording:** Integrated CameraX with real-time preview and video capture.
+- **Video Playback:** Seamless playback using Media3 / ExoPlayer in the journal feed.
+- **Local Persistence:** SQLDelight used for storing video metadata.
+- **Permission Management:** Robust handling of Camera and Audio permissions.
+- **Sharing:** Social sharing of recorded videos via Android's `ACTION_SEND`.
+- **DI:** Fully powered by Koin for dependency injection.
+- **MVI Pattern:** Reactive UI using State, Event, and Effect streams.
 
 ---
 
 ## **Next Steps 🚀**
 
-1. Implement actual **video recording** using device camera
-2. Handle **permissions** (Camera & Storage)
-3. Replace placeholder videos with real recorded clips
-4. Implement **video playback** using Media3 / ExoPlayer
-5. Add **video thumbnails, sharing, Material theming**
-6. Add **unit tests** for ViewModels and UseCases
-7. (Optional) CI/CD using GitHub Actions
+1. Expand **unit tests** coverage for ViewModels and Repositories.
 
 ---
 
 ## **How to Run**
 
-1. Clone the project
-2. Open in Android Studio
-3. Build and run the `:app` module
-4. The first screen shows a feed of videos (currently placeholder videos)
+1. Clone the project.
+2. Open in Android Studio (Ladybug or newer).
+3. Build and run the `:app` module.
+4. Grant permissions to start recording your journal entries!
 
 ---
 
-## **DI / Hilt Setup**
+## **Project Structure**
 
-- `VideoRepositoryImpl` in `data` module
-- Repository interface in `domain` module
-- Hilt provides implementations to `ui` via constructor injection
-- `FeedViewModel` uses `GetVideosUseCase` & `RecordVideoUseCase` from `domain`
+- `:app` - Entry point and Fragment container.
+- `:ui` - Journal feed screen and UI components.
+- `:video` - Camera recording and playback implementation.
+- `:domain` - Use cases and repository interfaces.
+- `:data` - SQLDelight database and repository implementations.
+- `:shared` - Common models and utilities.

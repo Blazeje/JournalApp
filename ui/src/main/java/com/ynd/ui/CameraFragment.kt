@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import com.ynd.domain.entity.VideoEntry
 import com.ynd.video.CameraScreen
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import com.ynd.ui.JournalContract.Event
 
 class CameraFragment : Fragment() {
 
-    private val viewModel: FeedViewModel by activityViewModel()
+    private val viewModel: JournalViewModel by activityViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,18 +25,18 @@ class CameraFragment : Fragment() {
                 MaterialTheme {
                     CameraScreen(
                         onVideoRecorded = { uri, description ->
-                            viewModel.addVideo(
-                                VideoEntry(
-                                    fileUri = uri.toString(),
+                            viewModel.push(
+                                Event.VideoRecorded(
+                                    uri = uri.toString(),
                                     description = description
                                 )
                             )
-                            parentFragmentManager.popBackStack()
                         },
                         onBack = {
                             parentFragmentManager.popBackStack()
                         }
                     )
+
                 }
             }
         }

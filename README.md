@@ -13,7 +13,7 @@ A small Kotlin/Jetpack Compose app that allows users to record and view short vi
 - **Build Tools:** AGP 9.0.0, JDK 21
 - **Minimum SDK:** 27, Target SDK: 36
 
-## **What’s Done ✅**
+## **What’s Done**
 
 - **Modular Architecture:** Clean separation into `app`, `ui`, `video`, `domain`, `data`, and `shared` modules.
 - **Video Recording:** Integrated CameraX with real-time preview and video capture.
@@ -23,21 +23,7 @@ A small Kotlin/Jetpack Compose app that allows users to record and view short vi
 - **Sharing:** Social sharing of recorded videos via Android's `ACTION_SEND`.
 - **DI:** Fully powered by Koin for dependency injection.
 - **MVI Pattern:** Reactive UI using State, Event, and Effect streams.
-
----
-
-## **Next Steps 🚀**
-
-1. Expand **unit tests** coverage for ViewModels and Repositories.
-
----
-
-## **How to Run**
-
-1. Clone the project.
-2. Open in Android Studio (Ladybug or newer).
-3. Build and run the `:app` module.
-4. Grant permissions to start recording your journal entries!
+- **Unit tests:** Tests to show my approach.
 
 ---
 
@@ -49,3 +35,10 @@ A small Kotlin/Jetpack Compose app that allows users to record and view short vi
 - `:domain` - Use cases and repository interfaces.
 - `:data` - SQLDelight database and repository implementations.
 - `:shared` - Common models and utilities.
+
+## Take it
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/Blazeje/JournalApp.git

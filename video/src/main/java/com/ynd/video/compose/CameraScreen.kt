@@ -20,10 +20,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.ynd.domain.repository.VideoRecorderRepository
 import com.ynd.domain.repository.VideoCreatorRepository
 import com.ynd.video.CameraContract.State
@@ -31,6 +32,7 @@ import com.ynd.video.CameraContract.Event
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import java.io.File
+import com.ynd.shared.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,12 +74,12 @@ fun CameraScreen(
                 CenterAlignedTopAppBar(
                     title = {
                         Text(
-                            text = "My Journal",
+                            text = stringResource(R.string.title),
                             color = Color.White,
                             style = MaterialTheme.typography.headlineMedium
                         )
                     },
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent
                     )
                 )
@@ -102,7 +104,7 @@ fun CameraScreen(
                             cameraProviderFuture.addListener({
                                 val cameraProvider = cameraProviderFuture.get()
                                 val preview = Preview.Builder().build().also {
-                                    it.setSurfaceProvider(previewView.surfaceProvider)
+                                    it.surfaceProvider = previewView.surfaceProvider
                                 }
 
                                 val recorder = Recorder.Builder()
@@ -137,7 +139,7 @@ fun CameraScreen(
                                 .padding(16.dp)
                         ) {
                             Text(
-                                "Recording...",
+                                text = stringResource(R.string.recording_video),
                                 color = Color.Red,
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                                 style = MaterialTheme.typography.labelLarge
@@ -175,7 +177,8 @@ fun CameraScreen(
                         ),
                         modifier = Modifier.height(56.dp).weight(1f).padding(horizontal = 8.dp)
                     ) {
-                        Text(if (state.isRecording) "Stop" else "Record")
+                        Text(if (state.isRecording) stringResource(R.string.stop_video)
+                        else stringResource(R.string.record_video))
                     }
 
                     Button(
@@ -186,7 +189,7 @@ fun CameraScreen(
                         ),
                         modifier = Modifier.height(56.dp).weight(1f).padding(horizontal = 8.dp)
                     ) {
-                        Text("Back")
+                        Text(stringResource(R.string.back))
                     }
                 }
             }

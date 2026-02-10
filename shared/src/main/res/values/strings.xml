@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">JournalApp</string>
+    <string name="title">My Journal</string>
+    <string name="add_video">+</string>
+    <string name="no_description">No description</string>
+    <string name="add_description">Add Description</string>
+    <string name="enter_description">Enter description...</string>
+    <string name="save_video">Save</string>
+    <string name="cancel_video">Cancel</string>
+    <string name="recording_video">Recording...</string>
+    <string name="record_video">Record</string>
+    <string name="stop_video">Stop</string>
+    <string name="back">Back</string>
+</resources>

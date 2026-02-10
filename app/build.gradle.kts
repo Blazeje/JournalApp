@@ -57,6 +57,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":ui"))
     implementation(project(":video"))
+    implementation(project(":shared"))
 
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)

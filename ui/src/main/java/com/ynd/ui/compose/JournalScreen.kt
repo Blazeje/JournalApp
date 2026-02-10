@@ -12,11 +12,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.ynd.ui.JournalContract.Event
 import com.ynd.ui.JournalContract.State
 import com.ynd.video.compose.VideoPlayer
+import com.ynd.shared.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,12 +44,12 @@ fun JournalScreen(state: State, onEvent: (Event) -> Unit) {
                 CenterAlignedTopAppBar(
                     title = {
                         Text(
-                            text = "My Journal",
+                            text = stringResource(R.string.title),
                             color = Color.White,
                             style = MaterialTheme.typography.headlineMedium
                         )
                     },
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent
                     )
                 )
@@ -58,7 +60,7 @@ fun JournalScreen(state: State, onEvent: (Event) -> Unit) {
                     containerColor = Color(0xFF2a5298),
                     contentColor = Color.White
                 ) {
-                    Text("+")
+                    Text(text = stringResource(R.string.add_video))
                 }
             }
         ) { padding ->
@@ -91,7 +93,7 @@ fun JournalScreen(state: State, onEvent: (Event) -> Unit) {
                             }
                         )
                         Text(
-                            text = video.description ?: "No description",
+                            text = video.description ?: stringResource(R.string.no_description),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp),

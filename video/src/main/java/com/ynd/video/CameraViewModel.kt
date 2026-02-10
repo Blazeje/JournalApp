@@ -3,6 +3,7 @@ package com.ynd.video
 import androidx.lifecycle.viewModelScope
 import com.ynd.domain.RecordVideoUseCase
 import com.ynd.domain.entity.VideoEntry
+import com.ynd.domain.CoroutineDispatcherProvider
 import com.ynd.video.CameraContract.Event
 import com.ynd.video.CameraContract.Effect
 import com.ynd.video.CameraContract.State
@@ -11,9 +12,12 @@ import com.ynd.shared.MviViewModel
 import kotlinx.coroutines.launch
 
 class CameraViewModel(
-    private val recordVideoUseCase: RecordVideoUseCase
+    private val recordVideoUseCase: RecordVideoUseCase,
+    dispatcherProvider: CoroutineDispatcherProvider,
 ) : MviViewModel<State, Event, InternalEvent, Effect>(
-    initialState = State()
+    initialState = State(),
+    eventsDispatcher = dispatcherProvider.unconfined,
+    uiDispatcher = dispatcherProvider.main
 ) {
 
     override fun onHandleUiEvent(uiEvent: Event, state: State) {

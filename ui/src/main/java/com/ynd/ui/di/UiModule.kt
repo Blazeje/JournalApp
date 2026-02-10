@@ -7,5 +7,5 @@ import org.koin.dsl.module
 
 val uiModule = module {
     factory { GetVideosUseCase(get()) }
-    viewModel { JournalViewModel(get()) }
+    viewModel { JournalViewModel(get(), get()) }
 }

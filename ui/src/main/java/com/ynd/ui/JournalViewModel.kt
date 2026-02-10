@@ -8,11 +8,15 @@ import com.ynd.ui.JournalContract.Event
 import com.ynd.ui.JournalContract.State
 import com.ynd.ui.JournalContract.Effect
 import com.ynd.ui.JournalContract.InternalEvent
+import com.ynd.domain.CoroutineDispatcherProvider
 
 class JournalViewModel(
-    private val getVideosUseCase: GetVideosUseCase
+    private val getVideosUseCase: GetVideosUseCase,
+    dispatcherProvider: CoroutineDispatcherProvider,
 ) : MviViewModel<State, Event, InternalEvent, Effect>(
-    initialState = State()
+    initialState = State(),
+    eventsDispatcher = dispatcherProvider.unconfined,
+    uiDispatcher = dispatcherProvider.io
 ) {
 
     init {
@@ -28,7 +32,7 @@ class JournalViewModel(
         }
     }
 
-    override fun onHandleUiEvent(uiEvent:Event, state: State) {
+    override fun onHandleUiEvent(uiEvent: Event, state: State) {
         when (uiEvent) {
             Event.AddClicked -> emitEffect(Effect.OpenCamera)
 
@@ -49,4 +53,3 @@ class JournalViewModel(
             is InternalEvent.PlayingChanged -> state.copy(playingVideoId = event.id)
         }
 }
-

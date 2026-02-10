@@ -7,5 +7,5 @@ import org.koin.dsl.module
 
 val videoModule = module {
     factory { RecordVideoUseCase(get()) }
-    viewModel { CameraViewModel( get()) }
+    viewModel { CameraViewModel(get(), get()) }
 }

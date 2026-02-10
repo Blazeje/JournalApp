@@ -1,9 +1,11 @@
 package com.ynd.data.di
 
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
+import com.ynd.data.CoroutineDispatcherProviderImpl
 import com.ynd.data.db.JournalDatabase
 import com.ynd.data.repository.VideoCreatorRepositoryImpl
 import com.ynd.data.repository.VideoRepositoryImpl
+import com.ynd.domain.CoroutineDispatcherProvider
 import com.ynd.domain.repository.VideoCreatorRepository
 import com.ynd.domain.repository.VideoRepository
 import org.koin.android.ext.koin.androidContext
@@ -22,4 +24,6 @@ val dataModule = module {
     singleOf(::VideoRepositoryImpl) bind VideoRepository::class
     
     singleOf(::VideoCreatorRepositoryImpl) bind VideoCreatorRepository::class
+
+    singleOf(::CoroutineDispatcherProviderImpl) bind CoroutineDispatcherProvider::class
 }

@@ -10,8 +10,9 @@ interface CameraContract {
 
     sealed class Event {
         object StartRecording : Event()
-        data class StopRecording(val uri: Uri, val description: String) : Event()
         object BackClicked : Event()
+        object CancelRecording : Event()
+        data class StopRecording(val uri: Uri, val description: String) : Event()
     }
 
     sealed class InternalEvent {

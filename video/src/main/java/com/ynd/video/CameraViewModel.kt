@@ -22,7 +22,9 @@ class CameraViewModel(
 
     override fun onHandleUiEvent(uiEvent: Event, state: State) {
         when (uiEvent) {
-            Event.StartRecording -> pushInternal(InternalEvent.RecordingStarted)
+
+            Event.StartRecording ->
+                pushInternal(InternalEvent.RecordingStarted)
 
             is Event.StopRecording -> {
                 viewModelScope.launch {
@@ -37,7 +39,18 @@ class CameraViewModel(
                 pushInternal(InternalEvent.RecordingStopped)
             }
 
-            Event.BackClicked -> emitEffect(Effect.NavigateBack)
+            Event.BackClicked -> {
+                if (state.isRecording) {
+                    push(Event.CancelRecording)
+                } else {
+                    emitEffect(Effect.NavigateBack)
+                }
+            }
+
+            Event.CancelRecording -> {
+                pushInternal(InternalEvent.RecordingStopped)
+                emitEffect(Effect.NavigateBack)
+            }
         }
     }
 

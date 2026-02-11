@@ -182,7 +182,14 @@ fun CameraScreen(
                     }
 
                     Button(
-                        onClick = { onEvent(Event.BackClicked) },
+                        onClick = {
+                            coroutineScope.launch {
+                                if (state.isRecording) {
+                                    videoRecorderRepository?.stopRecording()?.delete()
+                                }
+                                onEvent(Event.BackClicked)
+                            }
+                        },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.White.copy(alpha = 0.2f),
                             contentColor = Color.White
